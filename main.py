@@ -4,18 +4,18 @@ class Grafo:
     def __init__(self, vertices):
         self.vertices = vertices
         self.matriz_adjacencia = [[0] * vertices for _ in range(vertices)]
-        self.lista_adjacencia = {i: [] for i in range(vertices)}
+        self.lista_adjacencia = {i: set() for i in range(vertices)}
 
     def cria_aresta(self, v1, v2):
         if 0 <= v1 < self.vertices and 0 <= v2 < self.vertices:
             self.matriz_adjacencia[v1][v2] = 1
             self.matriz_adjacencia[v2][v1] = 1
-            self.lista_adjacencia[v1].append(v2)
-            self.lista_adjacencia[v2].append(v1)
+            self.lista_adjacencia[v1].add(v2)
+            self.lista_adjacencia[v2].add(v1)
             print(f"Aresta entre {v1} e {v2} criada.")
-            self.exibe_grafo()
         else:
             print("Vértice fora da faixa válida.")
+        self.exibe_grafo()
 
     def remove_aresta(self, v1, v2):
         if 0 <= v1 < self.vertices and 0 <= v2 < self.vertices:
@@ -34,24 +34,21 @@ class Grafo:
     def pondera_rotula_vertice(self, vertice, peso, rotulo):
         if 0 <= vertice < self.vertices:
             print(f"Vértice {vertice} ponderado com peso {peso} e rotulado como '{rotulo}'.")
-            self.exibe_grafo()
         else:
             print("Vértice fora da faixa válida.")
+        self.exibe_grafo()
 
     def pondera_rotula_aresta(self, v1, v2, peso, rotulo):
         if 0 <= v1 < self.vertices and 0 <= v2 < self.vertices:
             print(f"Aresta entre {v1} e {v2} ponderada com peso {peso} e rotulada como '{rotulo}'.")
-            self.exibe_grafo()
         else:
             print("Vértice fora da faixa válida.")
+        self.exibe_grafo()
 
     def checa_adjacencia_vertice(self, v1, v2):
         if 0 <= v1 < self.vertices and 0 <= v2 < self.vertices:
             resultado = self.matriz_adjacencia[v1][v2] == 1
-            if resultado:
-                print(f"Vértice {v1} é adjacente a {v2}.")
-            else:
-                print(f"Vértice {v1} não é adjacente a {v2}.")
+            print(f"Vértice {v1} é adjacente a {v2}.") if resultado else print(f"Vértice {v1} não é adjacente a {v2}.")
             return resultado
         else:
             print("Vértice fora da faixa válida.")
@@ -60,10 +57,7 @@ class Grafo:
     def checa_existencia_aresta(self, v1, v2):
         if 0 <= v1 < self.vertices and 0 <= v2 < self.vertices:
             resultado = self.matriz_adjacencia[v1][v2] == 1
-            if resultado:
-                print(f"Aresta entre {v1} e {v2} existe.")
-            else:
-                print(f"Aresta entre {v1} e {v2} não existe.")
+            print(f"Aresta entre {v1} e {v2} existe.") if resultado else print(f"Aresta entre {v1} e {v2} não existe.")
             return resultado
         else:
             print("Vértice fora da faixa válida.")
@@ -72,10 +66,7 @@ class Grafo:
     def checa_adjacencia_aresta(self, v1, v2):
         if 0 <= v1 < self.vertices and 0 <= v2 < self.vertices:
             resultado = self.matriz_adjacencia[v1][v2] == 1
-            if resultado:
-                print(f"Aresta entre {v1} e {v2} é adjacente.")
-            else:
-                print(f"Aresta entre {v1} e {v2} não é adjacente.")
+            print(f"Aresta entre {v1} e {v2} é adjacente.") if resultado else print(f"Aresta entre {v1} e {v2} não é adjacente.")
             return resultado
         else:
             print("Vértice fora da faixa válida.")
@@ -89,20 +80,14 @@ class Grafo:
 
     def checa_grafo_vazio(self):
         resultado = all(all(cell == 0 for cell in row) for row in self.matriz_adjacencia)
-        if resultado:
-            print("O grafo está vazio.")
-        else:
-            print("O grafo não está vazio.")
+        print("O grafo está vazio.") if resultado else print("O grafo não está vazio.")
         return resultado
 
     def checa_grafo_completo(self):
         completo = all(sum(row) == self.vertices - 1 for row in self.matriz_adjacencia)
         reflexivo = all(self.matriz_adjacencia[i][i] == 0 for i in range(self.vertices))
         resultado = completo and reflexivo
-        if resultado:
-            print("O grafo é completo.")
-        else:
-            print("O grafo não é completo.")
+        print("O grafo é completo.") if resultado else print("O grafo não é completo.")
         return resultado
 
     def exibe_grafo(self):
@@ -112,7 +97,7 @@ class Grafo:
 
         print("\nLista de Adjacência:")
         for vertice, vizinhos in self.lista_adjacencia.items():
-            print(f"{vertice}: {vizinhos}")
+            print(f"{vertice}: {list(vizinhos)}")
 
 
 def menu():
