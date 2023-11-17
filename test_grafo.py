@@ -22,6 +22,7 @@ class TestGrafoMethods(unittest.TestCase):
         output = self.held_output.getvalue().strip()
         self.held_output.close()
         sys.stdout = sys.__stdout__
+
         return output
 
     def test_cria_aresta(self):
@@ -58,12 +59,72 @@ class TestGrafoMethods(unittest.TestCase):
         self.grafo.cria_aresta(0, 2)
         self.grafo.cria_aresta(0, 3)
         self.grafo.cria_aresta(0, 4)
+        self.grafo.cria_aresta(1, 2)
+        self.grafo.cria_aresta(1, 3)
+        self.grafo.cria_aresta(1, 4)
+        self.grafo.cria_aresta(2, 3)
+        self.grafo.cria_aresta(2, 4)
+        self.grafo.cria_aresta(3, 4)
+
         self.assertTrue(self.grafo.checa_grafo_completo())
 
     def test_checa_quantidade_vertices_arestas(self):
         vertices, arestas = self.grafo.checa_quantidade_vertices_arestas()
         self.assertEqual(vertices, self.num_vertices)
         self.assertEqual(arestas, 0)
+
+    def test_checa_existencia_aresta_invalida(self):
+        self.assertFalse(self.grafo.checa_existencia_aresta(1, 6))
+
+    def test_checa_grafo_nao_vazio(self):
+        self.grafo.cria_aresta(0, 1)
+        self.assertFalse(self.grafo.checa_grafo_vazio())
+
+    def test_checa_grafo_nao_completo(self):
+        self.grafo.cria_aresta(0, 1)
+        self.assertFalse(self.grafo.checa_grafo_completo())
+
+    def test_checa_adjacencia_vertice(self):
+        self.grafo.cria_aresta(1, 2)
+        self.assertTrue(self.grafo.checa_adjacencia_vertice(1, 2))
+
+    def test_checa_adjacencia_vertice_inexistente(self):
+        self.assertFalse(self.grafo.checa_adjacencia_vertice(1, 3))
+
+    def test_checa_adjacencia_aresta(self):
+        self.grafo.cria_aresta(1, 2)
+        self.assertTrue(self.grafo.checa_adjacencia_aresta(1, 2))
+
+    def test_checa_adjacencia_aresta_inexistente(self):
+        self.assertFalse(self.grafo.checa_adjacencia_aresta(1, 3))
+
+    def test_remove_aresta_inexistente(self):
+        self.grafo.remove_aresta(1, 2)
+        output = self.release_output()
+        self.assertIn("Aresta entre 1 e 2 não existe.", output)
+
+    def test_pondera_rotula_vertice_invalido(self):
+        self.grafo.pondera_rotula_vertice(6, 3.5, "A")
+        output = self.release_output()
+        self.assertIn("Vértice fora da faixa válida.", output)
+
+    def test_pondera_rotula_aresta_invalida(self):
+        self.grafo.pondera_rotula_aresta(1, 6, 2.0, "B")
+        output = self.release_output()
+        self.assertIn("Vértice fora da faixa válida.", output)
+
+    def test_exibe_grafo(self):
+        self.grafo.cria_aresta(1, 2)
+        self.grafo.exibe_grafo()
+        output = self.release_output()
+        self.assertIn("Matriz de Adjacência:", output)
+        self.assertIn("Lista de Adjacência:", output)
+
+    def test_checa_adjacencia_vertice_a_si_mesmo(self):
+        self.assertFalse(self.grafo.checa_adjacencia_vertice(1, 1))
+
+    def test_checa_adjacencia_aresta_a_si_mesma(self):
+        self.assertFalse(self.grafo.checa_adjacencia_aresta(1, 1))
 
 if __name__ == '__main__':
     unittest.main()
