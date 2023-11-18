@@ -10,29 +10,29 @@ class Grafo:
         self.pesos_vertices = {}
         self.rotulos_vertices = {}
 
-    def cria_aresta(self, v1, v2):
-        if 0 <= v1 < self.vertices and 0 <= v2 < self.vertices:
-            self.matriz_adjacencia[v1][v2] = 1
-            self.matriz_adjacencia[v2][v1] = 1
-            self.lista_adjacencia[v1].add(v2)
-            self.lista_adjacencia[v2].add(v1)
-            print(f"Aresta entre {v1} e {v2} criada.")
+    def cria_aresta(self, vertice1, vertice2):
+        if 0 <= vertice1 < self.vertices and 0 <= vertice2 < self.vertices:
+            self.matriz_adjacencia[vertice1][vertice2] = 1
+            self.matriz_adjacencia[vertice2][vertice1] = 1
+            self.lista_adjacencia[vertice1].add(vertice2)
+            self.lista_adjacencia[vertice2].add(vertice1)
+            print(f"Aresta entre {vertice1} e {vertice2} criada.")
         else:
             print("Vértice fora da faixa válida.")
         self.exibe_grafo()
 
-    def remove_aresta(self, v1, v2):
-        if 0 <= v1 < self.vertices and 0 <= v2 < self.vertices:
-            if self.matriz_adjacencia[v1][v2] == 1:
-                self.matriz_adjacencia[v1][v2] = 0
-                self.matriz_adjacencia[v2][v1] = 0
-                self.lista_adjacencia[v1].remove(v2)
-                self.lista_adjacencia[v2].remove(v1)
-                print(f"Aresta entre {v1} e {v2} removida.")
-                self.pesos_arestas.pop((v1, v2), None)
-                self.rotulos_arestas.pop((v1, v2), None)
+    def remove_aresta(self, vertice1, vertice2):
+        if 0 <= vertice1 < self.vertices and 0 <= vertice2 < self.vertices:
+            if self.matriz_adjacencia[vertice1][vertice2] == 1:
+                self.matriz_adjacencia[vertice1][vertice2] = 0
+                self.matriz_adjacencia[vertice2][vertice1] = 0
+                self.lista_adjacencia[vertice1].remove(vertice2)
+                self.lista_adjacencia[vertice2].remove(vertice1)
+                print(f"Aresta entre {vertice1} e {vertice2} removida.")
+                self.pesos_arestas.pop((vertice1, vertice2), None)
+                self.rotulos_arestas.pop((vertice1, vertice2), None)
             else:
-                print(f"Aresta entre {v1} e {v2} não existe.")
+                print(f"Aresta entre {vertice1} e {vertice2} não existe.")
         else:
             print("Vértice fora da faixa válida.")
         self.exibe_grafo()
@@ -48,52 +48,52 @@ class Grafo:
             return False
 
 
-    def pondera_rotula_aresta(self, v1, v2, peso, rotulo):
-        if 0 <= v1 < self.vertices and 0 <= v2 < self.vertices:
-            if self.matriz_adjacencia[v1][v2] == 1:
-                self.pesos_arestas[(v1, v2)] = peso
-                self.rotulos_arestas[(v1, v2)] = rotulo
-                print(f"Aresta entre {v1} e {v2} ponderada com peso {peso} e rotulada como '{rotulo}'.")
+    def pondera_rotula_aresta(self, vertice1, vertice2, peso, rotulo):
+        if 0 <= vertice1 < self.vertices and 0 <= vertice2 < self.vertices:
+            if self.matriz_adjacencia[vertice1][vertice2] == 1:
+                self.pesos_arestas[(vertice1, vertice2)] = peso
+                self.rotulos_arestas[(vertice1, vertice2)] = rotulo
+                print(f"Aresta entre {vertice1} e {vertice2} ponderada com peso {peso} e rotulada como '{rotulo}'.")
             else:
                 print("Aresta não existe.")
         else:
             print("Vértice fora da faixa válida.")
         self.exibe_grafo()
 
-    def checa_adjacencia_vertice(self, v1, v2):
-        if 0 <= v1 < self.vertices and 0 <= v2 < self.vertices:
-            resultado = self.matriz_adjacencia[v1][v2] == 1
-            print(f"Vértice {v1} é adjacente a {v2}.") if resultado else print(f"Vértice {v1} não é adjacente a {v2}.")
+    def checa_adjacencia_vertice(self, vertice1, vertice2):
+        if 0 <= vertice1 < self.vertices and 0 <= vertice2 < self.vertices:
+            resultado = self.matriz_adjacencia[vertice1][vertice2] == 1
+            print(f"Vértice {vertice1} é adjacente a {vertice2}.") if resultado else print(f"Vértice {vertice1} não é adjacente a {vertice2}.")
             return resultado
         else:
             print("Vértice fora da faixa válida.")
             return False
 
-    def pondera_rotula_aresta(self, v1, v2, peso, rotulo):
-        if 0 <= v1 < self.vertices and 0 <= v2 < self.vertices:
-            if self.matriz_adjacencia[v1][v2] == 1:
-                self.pesos_arestas[(v1, v2)] = peso
-                self.rotulos_arestas[(v1, v2)] = rotulo
-                print(f"Aresta entre {v1} e {v2} ponderada com peso {peso} e rotulada como '{rotulo}'.")
+    def pondera_rotula_aresta(self, vertice1, vertice2, peso, rotulo):
+        if 0 <= vertice1 < self.vertices and 0 <= vertice2 < self.vertices:
+            if self.matriz_adjacencia[vertice1][vertice2] == 1:
+                self.pesos_arestas[(vertice1, vertice2)] = peso
+                self.rotulos_arestas[(vertice1, vertice2)] = rotulo
+                print(f"Aresta entre {vertice1} e {vertice2} ponderada com peso {peso} e rotulada como '{rotulo}'.")
             else:
                 print("Aresta não existe.")
         else:
             print("Vértice fora da faixa válida.")
         self.exibe_grafo()
 
-    def checa_existencia_aresta(self, v1, v2):
-        if 0 <= v1 < self.vertices and 0 <= v2 < self.vertices:
-            resultado = self.matriz_adjacencia[v1][v2] == 1
-            print(f"Aresta entre {v1} e {v2} existe.") if resultado else print(f"Aresta entre {v1} e {v2} não existe.")
+    def checa_existencia_aresta(self, vertice1, vertice2):
+        if 0 <= vertice1 < self.vertices and 0 <= vertice2 < self.vertices:
+            resultado = self.matriz_adjacencia[vertice1][vertice2] == 1
+            print(f"Aresta entre {vertice1} e {vertice2} existe.") if resultado else print(f"Aresta entre {vertice1} e {vertice2} não existe.")
             return resultado
         else:
             print("Vértice fora da faixa válida.")
             return False
 
-    def checa_adjacencia_aresta(self, v1, v2):
-        if 0 <= v1 < self.vertices and 0 <= v2 < self.vertices:
-            resultado = self.matriz_adjacencia[v1][v2] == 1
-            print(f"Aresta entre {v1} e {v2} é adjacente.") if resultado else print(f"Aresta entre {v1} e {v2} não é adjacente.")
+    def checa_adjacencia_aresta(self, vertice1, vertice2):
+        if 0 <= vertice1 < self.vertices and 0 <= vertice2 < self.vertices:
+            resultado = self.matriz_adjacencia[vertice1][vertice2] == 1
+            print(f"Aresta entre {vertice1} e {vertice2} é adjacente.") if resultado else print(f"Aresta entre {vertice1} e {vertice2} não é adjacente.")
             return resultado
         else:
             print("Vértice fora da faixa válida.")
@@ -128,13 +128,13 @@ class Grafo:
 
         print("\nPesos das Arestas:")
         for aresta, peso in self.pesos_arestas.items():
-            v1, v2 = aresta
-            print(f"Aresta entre {v1} e {v2}: Peso {peso}")
+            vertice1, vertice2 = aresta
+            print(f"Aresta entre {vertice1} e {vertice2}: Peso {peso}")
 
         print("\nRótulos das Arestas:")
         for aresta, rotulo in self.rotulos_arestas.items():
-            v1, v2 = aresta
-            print(f"Aresta entre {v1} e {v2}: Rótulo {rotulo}")
+            vertice1, vertice2 = aresta
+            print(f"Aresta entre {vertice1} e {vertice2}: Rótulo {rotulo}")
 
         print("\nPesos dos Vértices:")
         for vertice, peso in self.pesos_vertices.items():
@@ -176,20 +176,20 @@ if __name__ == "__main__":
 
         if escolha == 1:
             try:
-                v1 = int(input("Digite o primeiro vértice: "))
-                v2 = int(input("Digite o segundo vértice: "))
+                vertice1 = int(input("Digite o primeiro vértice: "))
+                vertice2 = int(input("Digite o segundo vértice: "))
             except ValueError:
                 print("Por favor, insira números inteiros válidos.")
                 continue
-            grafo.cria_aresta(v1, v2)
+            grafo.cria_aresta(vertice1, vertice2)
         elif escolha == 2:
             try:
-                v1 = int(input("Digite o primeiro vértice: "))
-                v2 = int(input("Digite o segundo vértice: "))
+                vertice1 = int(input("Digite o primeiro vértice: "))
+                vertice2 = int(input("Digite o segundo vértice: "))
             except ValueError:
                 print("Por favor, insira números inteiros válidos.")
                 continue
-            grafo.remove_aresta(v1, v2)
+            grafo.remove_aresta(vertice1, vertice2)
         elif escolha == 3:
             try:
                 vertice = int(input("Digite o vértice a ser ponderado: "))
@@ -201,38 +201,38 @@ if __name__ == "__main__":
             grafo.pondera_rotula_vertice(vertice, peso, rotulo)
         elif escolha == 4:
             try:
-                v1 = int(input("Digite o primeiro vértice da aresta: "))
-                v2 = int(input("Digite o segundo vértice da aresta: "))
+                vertice1 = int(input("Digite o primeiro vértice da aresta: "))
+                vertice2 = int(input("Digite o segundo vértice da aresta: "))
                 peso = float(input("Digite o peso da aresta: "))
                 rotulo = input("Digite o rótulo da aresta: ")
             except ValueError:
                 print("Por favor, insira números e texto válidos.")
                 continue
-            grafo.pondera_rotula_aresta(v1, v2, peso, rotulo)
+            grafo.pondera_rotula_aresta(vertice1, vertice2, peso, rotulo)
         elif escolha == 5:
             try:
-                v1 = int(input("Digite o primeiro vértice: "))
-                v2 = int(input("Digite o segundo vértice: "))
+                vertice1 = int(input("Digite o primeiro vértice: "))
+                vertice2 = int(input("Digite o segundo vértice: "))
             except ValueError:
                 print("Por favor, insira números inteiros válidos.")
                 continue
-            grafo.checa_adjacencia_vertice(v1, v2)
+            grafo.checa_adjacencia_vertice(vertice1, vertice2)
         elif escolha == 6:
             try:
-                v1 = int(input("Digite o primeiro vértice: "))
-                v2 = int(input("Digite o segundo vértice: "))
+                vertice1 = int(input("Digite o primeiro vértice: "))
+                vertice2 = int(input("Digite o segundo vértice: "))
             except ValueError:
                 print("Por favor, insira números inteiros válidos.")
                 continue
-            grafo.checa_existencia_aresta(v1, v2)
+            grafo.checa_existencia_aresta(vertice1, vertice2)
         elif escolha == 7:
             try:
-                v1 = int(input("Digite o primeiro vértice: "))
-                v2 = int(input("Digite o segundo vértice: "))
+                vertice1 = int(input("Digite o primeiro vértice: "))
+                vertice2 = int(input("Digite o segundo vértice: "))
             except ValueError:
                 print("Por favor, insira números inteiros válidos.")
                 continue
-            grafo.checa_adjacencia_aresta(v1, v2)
+            grafo.checa_adjacencia_aresta(vertice1, vertice2)
         elif escolha == 8:
             grafo.checa_quantidade_vertices_arestas()
         elif escolha == 9:
