@@ -7,6 +7,8 @@ class Grafo:
         self.lista_adjacencia = {i: set() for i in range(vertices)}
         self.pesos_arestas = {}
         self.rotulos_arestas = {}
+        self.pesos_vertices = {}
+        self.rotulos_vertices = {}
 
     def cria_aresta(self, v1, v2):
         if 0 <= v1 < self.vertices and 0 <= v2 < self.vertices:
@@ -37,10 +39,14 @@ class Grafo:
 
     def pondera_rotula_vertice(self, vertice, peso, rotulo):
         if 0 <= vertice < self.vertices:
+            self.pesos_vertices[vertice] = peso
+            self.rotulos_vertices[vertice] = rotulo
             print(f"Vértice {vertice} ponderado com peso {peso} e rotulado como '{rotulo}'.")
+            return vertice
         else:
             print("Vértice fora da faixa válida.")
-        self.exibe_grafo()
+            return False
+
 
     def pondera_rotula_aresta(self, v1, v2, peso, rotulo):
         if 0 <= v1 < self.vertices and 0 <= v2 < self.vertices:
@@ -121,11 +127,13 @@ class Grafo:
             v1, v2 = aresta
             print(f"Aresta entre {v1} e {v2}: Rótulo {rotulo}")
 
-        print("\nPesos e Rótulos dos Vértices:")
-        for vertice in range(self.vertices):
-            peso = self.pesos_arestas.get(vertice, None)
-            rotulo = self.rotulos_arestas.get(vertice, None)
-            print(f"Vértice {vertice}: Peso {peso}, Rótulo {rotulo}")
+        print("\nPesos dos Vértices:")
+        for vertice, peso in self.pesos_vertices.items():
+            print(f"Vértice {vertice}: Peso {peso}")
+
+        print("\nRótulos dos Vértices:")
+        for vertice, rotulo in self.rotulos_vertices.items():
+            print(f"Vértice {vertice}: Rótulo {rotulo}")
 
 
 def menu():
