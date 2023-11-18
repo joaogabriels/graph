@@ -69,18 +69,6 @@ class Grafo:
             print("Vértice fora da faixa válida.")
             return False
 
-    def pondera_rotula_aresta(self, vertice1, vertice2, peso, rotulo):
-        if 0 <= vertice1 < self.vertices and 0 <= vertice2 < self.vertices:
-            if self.matriz_adjacencia[vertice1][vertice2] == 1:
-                self.pesos_arestas[(vertice1, vertice2)] = peso
-                self.rotulos_arestas[(vertice1, vertice2)] = rotulo
-                print(f"Aresta entre {vertice1} e {vertice2} ponderada com peso {peso} e rotulada como '{rotulo}'.")
-            else:
-                print("Aresta não existe.")
-        else:
-            print("Vértice fora da faixa válida.")
-        self.exibe_grafo()
-
     def checa_existencia_aresta(self, vertice1, vertice2):
         if 0 <= vertice1 < self.vertices and 0 <= vertice2 < self.vertices:
             resultado = self.matriz_adjacencia[vertice1][vertice2] == 1
