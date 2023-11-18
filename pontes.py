@@ -1,7 +1,7 @@
 import sys
-import time
+import timeit
 import random
-from collections import defaultdict
+from collections import defaultdict, deque
 
 class GrafoDirecionado:
     def __init__(self):
@@ -16,11 +16,11 @@ class GrafoDirecionado:
         self.adiciona_vertice(vertice_origem)
         self.adiciona_vertice(vertice_destino)
         self.lista_adjacencia[vertice_origem].add(vertice_destino)
-        self.pesos_arestas[(vertice_origem, vertice_destino)] = peso
+        self.pesos_arestas[frozenset((vertice_origem, vertice_destino))] = peso
 
     def remove_aresta(self, vertice_origem, vertice_destino):
         self.lista_adjacencia[vertice_origem].remove(vertice_destino)
-        del self.pesos_arestas[(vertice_origem, vertice_destino)]
+        del self.pesos_arestas[frozenset((vertice_origem, vertice_destino))]
 
     def busca_em_profundidade_iterativa(self, vertice, visitados, parent, tempo, low, descoberto):
         stack = [(vertice, iter(self.lista_adjacencia[vertice]))]
@@ -40,6 +40,36 @@ class GrafoDirecionado:
                 elif vizinho != parent[vertice_atual]:
                     low[vertice_atual] = min(low[vertice_atual], descoberto[vizinho])
             except StopIteration:
+                stack.pop()
+
+        return low
+
+    def busca_em_profundidade_iterativa_otimizada(self, vertice, visitados, parent, tempo, low, descoberto):
+        stack = [(vertice, iter(self.lista_adjacencia[vertice]))]
+
+        while stack:
+            vertice_atual, vizinhos = stack[-1]
+
+            if vertice_atual not in visitados:
+                visitados.add(vertice_atual)
+                parent[vertice_atual] = None  # Inicializando o pai do primeiro vértice
+                tempo[0] += 1
+                descoberto[vertice_atual] = low[vertice_atual] = tempo[0]
+
+            vizinho = next(vizinhos, None)
+            while vizinho is not None:
+                if vizinho not in visitados:
+                    visitados.add(vizinho)
+                    parent[vizinho] = vertice_atual
+                    tempo[0] += 1
+                    descoberto[vizinho] = low[vizinho] = tempo[0]
+                    stack.append((vizinho, iter(self.lista_adjacencia[vizinho])))
+                    break
+                elif vizinho != parent[vertice_atual]:
+                    low[vertice_atual] = min(low[vertice_atual], descoberto[vizinho])
+                vizinho = next(vizinhos, None)
+
+            if vizinho is None:
                 stack.pop()
 
         return low
@@ -82,11 +112,13 @@ class GrafoDirecionado:
 
         print("Pontes identificadas (Tarjan)")
 
-    def gera_grafo_aleatorio(self, num_vertices):
+    def gera_grafo_aleatorio(self, num_vertices, probabilidade=0.1):
         for i in range(num_vertices):
             for j in range(i + 1, num_vertices):
-                if random.choice([True, False]):
-                    self.cria_aresta(i, j)
+                if random.random() < probabilidade:
+                    aresta = frozenset((i, j))
+                    if aresta not in self.pesos_arestas:
+                        self.cria_aresta(i, j)
         return self
 
     def encontra_caminho_euleriano(self):
@@ -99,12 +131,11 @@ class GrafoDirecionado:
 
         def fleury(vertice):
             for vizinho in self.lista_adjacencia[vertice]:
-                if (vertice, vizinho) not in self.pesos_arestas:
-                    continue
-
-                self.remove_aresta(vertice, vizinho)
-                caminho.append((vertice, vizinho))
-                fleury(vizinho)
+                aresta = frozenset((vertice, vizinho))
+                if aresta in self.pesos_arestas:
+                    self.remove_aresta(vertice, vizinho)
+                    caminho.append((vertice, vizinho))
+                    fleury(vizinho)
 
         vertice_inicial = next(iter(self.lista_adjacencia.keys()))
         fleury(vertice_inicial)
@@ -118,31 +149,24 @@ class GrafoDirecionado:
 
     def teste_tempos_computacionais(self):
         for num_vertices in [100, 1000, 10000, 100000]:
-            grafo = self.gera_grafo_aleatorio(num_vertices)
-
             self.vertices = num_vertices
             print(f"\nTestando para um grafo com {num_vertices} vértices:")
+            grafo = self.gera_grafo_aleatorio(num_vertices)
 
-            start_time_naive = time.time()
-            self.identifica_pontes_naive()
-            end_time_naive = time.time()
-            print(f"Tempo para identificar pontes (naive): {end_time_naive - start_time_naive} segundos")
+            time_naive = timeit.timeit(lambda: self.identifica_pontes_naive(), number=1)
+            print(f"Tempo para identificar pontes (naive): {time_naive} segundos")
 
             grafo = self.gera_grafo_aleatorio(num_vertices)
 
-            start_time_tarjan = time.time()
-            self.identifica_pontes_tarjan()
-            end_time_tarjan = time.time()
-            print(f"Tempo para identificar pontes (Tarjan): {end_time_tarjan - start_time_tarjan} segundos")
+            time_tarjan = timeit.timeit(lambda: self.identifica_pontes_tarjan(), number=1)
+            print(f"Tempo para identificar pontes (Tarjan): {time_tarjan} segundos")
 
             grafo = self.gera_grafo_aleatorio(num_vertices)
 
-            start_time_fleury = time.time()
-            grafo.encontra_caminho_euleriano()
-            end_time_fleury = time.time()
-            print(f"Tempo para encontrar caminho euleriano: {end_time_fleury - start_time_fleury} segundos")
+            time_fleury = timeit.timeit(lambda: grafo.encontra_caminho_euleriano(), number=1)
+            print(f"Tempo para encontrar caminho euleriano: {time_fleury} segundos")
 
 if __name__ == "__main__":
-    sys.setrecursionlimit(10**6)
+    sys.setrecursionlimit(10**7)
     grafo = GrafoDirecionado()
     grafo.teste_tempos_computacionais()
