@@ -81,6 +81,15 @@ class Grafo:
             print("Vértice fora da faixa válida.")
         self.exibe_grafo()
 
+    def checa_existencia_aresta(self, v1, v2):
+        if 0 <= v1 < self.vertices and 0 <= v2 < self.vertices:
+            resultado = self.matriz_adjacencia[v1][v2] == 1
+            print(f"Aresta entre {v1} e {v2} existe.") if resultado else print(f"Aresta entre {v1} e {v2} não existe.")
+            return resultado
+        else:
+            print("Vértice fora da faixa válida.")
+            return False
+
     def checa_adjacencia_aresta(self, v1, v2):
         if 0 <= v1 < self.vertices and 0 <= v2 < self.vertices:
             resultado = self.matriz_adjacencia[v1][v2] == 1
