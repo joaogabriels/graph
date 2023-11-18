@@ -126,5 +126,36 @@ class TestGrafoMethods(unittest.TestCase):
     def test_checa_adjacencia_aresta_a_si_mesma(self):
         self.assertFalse(self.grafo.checa_adjacencia_aresta(1, 1))
 
+    def test_aresta_com_peso_e_rotulo(self):
+        self.grafo.cria_aresta(1, 2)
+        self.grafo.pondera_rotula_aresta(1, 2, 2.0, "B")
+        output = self.release_output()
+        self.assertIn("Aresta entre 1 e 2 ponderada com peso 2.0 e rotulada como 'B'.", output)
+
+    def test_vertice_com_peso_e_rotulo(self):
+        self.grafo.pondera_rotula_vertice(1, 3.5, "A")
+        output = self.release_output()
+        self.assertIn("Vértice 1 ponderado com peso 3.5 e rotulado como 'A'.", output)
+
+    def test_aresta_invalida_com_peso_e_rotulo(self):
+        self.grafo.pondera_rotula_aresta(1, 6, 2.0, "B")
+        output = self.release_output()
+        self.assertIn("Vértice fora da faixa válida.", output)
+
+    def test_vertice_invalido_com_peso_e_rotulo(self):
+        self.grafo.pondera_rotula_vertice(6, 3.5, "A")
+        output = self.release_output()
+        self.assertIn("Vértice fora da faixa válida.", output)
+
+    def test_saida_padrao_casos_extras(self):
+        self.grafo.cria_aresta(1, 2)
+        self.grafo.pondera_rotula_aresta(1, 2, 2.0, "B")
+        self.grafo.pondera_rotula_vertice(1, 3.5, "A")
+        self.grafo.exibe_grafo()
+        output = self.release_output()
+        self.assertIn("Aresta entre 1 e 2 criada.", output)
+        self.assertIn("Aresta entre 1 e 2 ponderada com peso 2.0 e rotulada como 'B'.", output)
+        self.assertIn("Vértice 1 ponderado com peso 3.5 e rotulado como 'A'.", output)
+
 if __name__ == '__main__':
     unittest.main()
