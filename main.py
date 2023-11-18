@@ -27,6 +27,8 @@ class Grafo:
                 self.lista_adjacencia[v1].remove(v2)
                 self.lista_adjacencia[v2].remove(v1)
                 print(f"Aresta entre {v1} e {v2} removida.")
+                self.pesos_arestas.pop((v1, v2), None)
+                self.rotulos_arestas.pop((v1, v2), None)
             else:
                 print(f"Aresta entre {v1} e {v2} não existe.")
         else:
@@ -43,6 +45,8 @@ class Grafo:
     def pondera_rotula_aresta(self, v1, v2, peso, rotulo):
         if 0 <= v1 < self.vertices and 0 <= v2 < self.vertices:
             if self.matriz_adjacencia[v1][v2] == 1:
+                self.pesos_arestas[(v1, v2)] = peso
+                self.rotulos_arestas[(v1, v2)] = rotulo
                 print(f"Aresta entre {v1} e {v2} ponderada com peso {peso} e rotulada como '{rotulo}'.")
             else:
                 print("Aresta não existe.")
@@ -106,6 +110,22 @@ class Grafo:
         print("\nLista de Adjacência:")
         for vertice, vizinhos in self.lista_adjacencia.items():
             print(f"{vertice}: {list(vizinhos)}")
+
+        print("\nPesos das Arestas:")
+        for aresta, peso in self.pesos_arestas.items():
+            v1, v2 = aresta
+            print(f"Aresta entre {v1} e {v2}: Peso {peso}")
+
+        print("\nRótulos das Arestas:")
+        for aresta, rotulo in self.rotulos_arestas.items():
+            v1, v2 = aresta
+            print(f"Aresta entre {v1} e {v2}: Rótulo {rotulo}")
+
+        print("\nPesos e Rótulos dos Vértices:")
+        for vertice in range(self.vertices):
+            peso = self.pesos_arestas.get(vertice, None)
+            rotulo = self.rotulos_arestas.get(vertice, None)
+            print(f"Vértice {vertice}: Peso {peso}, Rótulo {rotulo}")
 
 
 def menu():
